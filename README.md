@@ -1,7 +1,8 @@
 # 6_Semestre
-Matlab code + Arduino code
-
-MATLAB code works for both Arduino codes, but Arduino_servo scribt is used when controlling servomotors and the other scribt is used when controlling FSR sensor
+'ArduinoProgramCode' folder contains the final product
+'Code Related to calibrate' folder contains calibration files, note that ArduinoAutoCalibrate doesnt work 
+'FFT analyse' folder contains all the need files for frequency analysis
+'notes' folder contains random files
 
 
 ## Installation

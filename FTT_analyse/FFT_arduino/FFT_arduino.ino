@@ -1,16 +1,19 @@
 /*
- FFT analyze.
+ FFT analyze 
  
- Write sine wave points to the serial port, followed by the Carriage Return and LineFeed terminator.
+ Write analog read values to the serial port, followed by the Carriage Return and LineFeed terminator.
+
+ Sampling frequence 320.
+
+ Use analog pin A1
  */
 
-int     i = 0;
 boolean doFsrSample = false; 
 
 // The setup routine runs once when you press reset:
 void setup() {
   // Initialize serial communication at 9600 bits per second:
-  Serial.begin(9600);
+  Serial.begin(19200);
 
   cli();              // stop interrupts 
   // TIMER 0 for interrupt frequency 320.5128205128205 Hz:
@@ -39,9 +42,9 @@ ISR(TIMER0_COMPA_vect){   //interrupt commands for TIMER 0 here
 void loop() {
   if(doFsrSample){
     // Write the analog data, followed by the terminator "Carriage Return" and "Linefeed".
-    Serial.print(analogRead(A0));
+    Serial.print(analogRead(A1));
     Serial.write(13);
     Serial.write(10);
-    i += 1;
+    doFsrSample = false; 
   }
 }

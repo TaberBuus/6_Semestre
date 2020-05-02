@@ -1,6 +1,5 @@
 function readArduinoData(src, ~)
-    sampleSize = 1000; 
-
+    sampleSize = 100; 
 
     % Read the ASCII data from the serialport object.
     data = readline(src);
@@ -14,7 +13,7 @@ function readArduinoData(src, ~)
 
     % If 10001 data points have been collected from the Arduino, switch off the
     % callbacks and plot the data.
-    if src.UserData.Count > sampleSize + 1; 
+    if src.UserData.Count > sampleSize + 1
         configureCallback(src, "off");
         plot(src.UserData.Data(2:end));
         disp(fprintf('Sample completed. %d data point recorded.',sampleSize)); 
