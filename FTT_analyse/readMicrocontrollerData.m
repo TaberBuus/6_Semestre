@@ -1,4 +1,4 @@
-function readArduinoData(src, ~)
+function readMicrocontrollerData(src, ~)
     sampleSize = 100; 
 
     % Read the ASCII data from the serialport object.

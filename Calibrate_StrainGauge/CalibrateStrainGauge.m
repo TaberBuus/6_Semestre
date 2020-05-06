@@ -22,7 +22,9 @@ disp('System reset');
 
 %% Connect microcontroller and sample data (remember to clear previos connection!)
 disp('Sampling started. Wait'); 
-arduinoObj = serialport("COM4",19200); %Arduino UNO
+%arduinoObj = serialport("COM4",19200); %Arduino UNO
+arduinoObj = serialport("COM5",9600); %Arduino UNO
+
 
 % arduinoObj = serialport("COM11",9600);   % Connect to the microcontroller Due by creating a serialport object using the port and baud rate specified in the microcontroller code.
 configureTerminator(arduinoObj,"CR/LF"); % Set the Terminator property to match the terminator that you specified in the microcontroller code.

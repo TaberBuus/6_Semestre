@@ -14,7 +14,9 @@ clear all;
 
 %Use serialportlist("available")' to find correct comPort
 % arduinoObj = serialport("COM4",9600); %Arduino UNO
-arduinoObj = serialport("COM11",9600); %Arduino NANO
+% arduinoObj = serialport("COM11",9600); %Arduino NANO
+arduinoObj = serialport("COM5",9600); %Arduino NANO
+
 
 % Mirrors the arduino acknowledgement routine :
 data = 'b'; 
