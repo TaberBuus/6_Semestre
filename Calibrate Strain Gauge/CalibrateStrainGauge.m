@@ -23,10 +23,8 @@ disp('System reset');
 %% Connect microcontroller and sample data (remember to clear previos connection!)
 disp('Sampling started. Wait'); 
 %arduinoObj = serialport("COM4",19200); %Arduino UNO
-arduinoObj = serialport("COM5",9600); %Arduino UNO
+arduinoObj = serialport("COM13",115200);   %Arduino M5Stack
 
-
-% arduinoObj = serialport("COM11",9600);   % Connect to the microcontroller Due by creating a serialport object using the port and baud rate specified in the microcontroller code.
 configureTerminator(arduinoObj,"CR/LF"); % Set the Terminator property to match the terminator that you specified in the microcontroller code.
 flush(arduinoObj);                       % Flush the serialport object to remove any old data.
 arduinoObj.UserData = struct("Data",[],"Count",1); %Prepare the UserData property to store the microcontroller data. The Data field of the struct saves the sine wave value and the Count field saves the x-axis value of the sine wave.
@@ -35,10 +33,6 @@ arduinoObj.UserData = struct("Data",[],"Count",1); %Prepare the UserData propert
 configureCallback(arduinoObj,"terminator",@readArduinoData); % Set the BytesAvailableFcnMode property to "terminator" and the BytesAvailableFcn property to @readArduinoData. The callback function readArduinoData is triggered when a new data (with the terminator) is available to be read from the microcontroller.
 
 %%
-data = (arduinoObj.UserData.Data(2:end)/1023)*5;
-
+data = (arduinoObj.UserData.Data(2:end)/4095)*3.3;
 sum(data)/length(arduinoObj.UserData.Data(2:end))
-
-
-% Analyse the recorded data in another scipbt
 

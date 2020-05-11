@@ -1,23 +1,23 @@
+boolean doLoadCellSample = false; 
 
-boolean doFsrSample = false; 
-
-const int numReadings = 10;      // points in the running filter
+const int numReadings = 10;     // points in the running filter
 int readings[numReadings];      // the readings from the analog input
 int readIndex = 0;              // the index of the current reading
 int total = 0;                  // the running total
 int initialReading = 0;         // Zero the sensor value; 
 
-int inputPin = 35;              // input pin; 
 
+int inputPin = 2;               // input pin; 
 float dataValue;         
-float a = 1373.364; 
+float a = 1373.364;             // slope found though callibration
 
 void setup() {
   Serial.begin(115200); 
-  dacWrite(25, 0);                          // mute speaker on M5stack
-  analogSetCycles(255);                     // set adc to max cycles used for charging the capacitor before performing ADC
+  dacWrite(25, 0);              // mute speaker on M5stack
+  analogSetCycles(255);         // set adc to max cycles used for charging the capacitor before performing ADC
   delay(100); 
 
+  // Zero the sensor to start weight.
   for (int i = 0; i < numReadings; i++){
     initialReading += analogRead(inputPin); 
   }
@@ -52,6 +52,5 @@ void loop() {
   dataValue = (float) (total / numReadings) - initialReading;
   dataValue = a*(dataValue/4095)*3.3; 
   Serial.println(dataValue); 
-
   delay(100); 
 }

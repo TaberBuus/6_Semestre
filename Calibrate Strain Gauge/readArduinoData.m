@@ -1,5 +1,5 @@
 function readArduinoData(src, ~)
-    sampleSize = 100; 
+    sampleSize = 10; 
 
     % Read the ASCII data from the serialport object.
     data = readline(src);
@@ -15,7 +15,6 @@ function readArduinoData(src, ~)
     % callbacks and plot the data.
     if src.UserData.Count > sampleSize + 1
         configureCallback(src, "off");
-        plot(src.UserData.Data(2:end));
         disp(fprintf('Sample completed. %d data point recorded.',sampleSize)); 
     end
 end

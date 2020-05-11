@@ -1,6 +1,6 @@
 function readArduinoData(src, ~)
     
-    sampleSize = (320*2)*10; 
+    sampleSize = (320*2)*3;
     
     if(src.UserData.Count == 1)
         disp('sampling started'); 
