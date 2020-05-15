@@ -36,133 +36,88 @@ configureCallback(arduinoObj,"terminator",@readArduinoData); % Set the BytesAvai
 straingauge = arduinoObj.UserData.Data(2:2:end); 
 fsr = arduinoObj.UserData.Data(3:2:end);
 
-%% Mia test 
-a = 1373.364; 
-mass = ((straingauge)/4095)*3.3*a; 
-force = (mass/1000)*9.82;
-force = force - 15.25;
-voltage = (fsr/4095)*3.3; 
-
-
-%% Mia test 2
-
-load('force_mia.mat')
-load('voltage_mia.mat')
-
-
-%plot(voltage,force,'.');
-scatter(voltage,force); 
-xlabel("FSR voltage ( v ) "); 
-ylabel("Force ( N ) ");
-ylim([0 25])
-grid('on'); 
-
-
-
-%% Load data 
-
-load('voltage_long2.mat')
-load('force_long2.mat')
-fsr = 4095*(voltage/3.3);
 
 %% data process
-Fs = 320;            % Sampling frequency                    
+Fs = 200;            % Sampling frequency                    
 T = 1/Fs;            % Sampling period  
-a = 1373.364; 
 
-mass = ((straingauge)/4095)*3.3*a; 
-mass = mass - 935;
-force = (mass/1000)*9.82;
-
+kilogram =  (1.095*straingauge -937.1 - 14);
+force = (kilogram/1000)*9.8;
 voltage = (fsr/4095)*3.3; 
 
+
 window = 0.5/T; 
-mask = ones(1,window); 
-mask2 = linspace(0,100,window); 
 mask3 = linspace(100,0, window); 
 
 movingIntegrel_3fsr = conv(fsr, mask3); % rigtig 
 movingIntegrel_3volt = conv(voltage, mask3); % rigtig 
 
-
 movingIntegrel_3fsrcliped = movingIntegrel_3fsr(1:length(fsr)); 
 movingIntegrel_3voltcliped = movingIntegrel_3volt(1:length(voltage)); 
 
-%scatter(voltage,mass)
-
-
-%scatter3(voltageCliped,massCliped,movingIntegrelCliped)
-%patch(voltageCliped,massCliped,movingIntegrelCliped, 'm') % doent work7
-%mesh(voltageCliped,massCliped,movingIntegrelCliped)
- 
-%zlabel('Intergrel (I)');
-
-%cftool
-% a + a1*x + a2*x^2 + a3*x^3 + a4*(x^4) + a5*(y) + a6*(y^2) + a7*(y^3) + a8*(y^4)
-
-%% Load data, 60 sec
-load('fsr_4_long.mat');     % unit (bit level)      
-load('mass_4_longmat.mat')  % unit (g)
-Fs = 320;                   % Sampling frequency                    
-T = 1/Fs;                   % Sampling period  
-
-voltage = (fsr/4095)*3.3;   % bit levels to voltage
-
-window = 0.5/T;             % size of integral filter 
-mask3 = linspace(100,0, window); 
-movingIntegrel_3 = conv(fsr, mask3); 
-movingIntegrel_3cliped = movingIntegrel_3(1:length(fsr)); 
-clear window; clear mask3; clear movingIntegrel_3; clear fsr; 
-
-force = (mass/1000)*9.82; 
-clear mass; 
-disp('60 sec loaded'); 
 %cftool
 
-
-%% Load data, 10 sec
-load('fsr_test.mat');       % unit (bit level)      
-load('mass_test.mat')       % unit (g)
-
-voltage = (fsr/4095)*3.3;   % bit levels to voltage
-Fs = 320;                   % Sampling frequency                    
-T = 1/Fs;                   % Sampling period  
-
-window = 0.5/T;             % size of integral filter 
-mask3 = linspace(100,0, window); 
-movingIntegrel_3 = conv(fsr, mask3); 
-movingIntegrel_3cliped = movingIntegrel_3(1:length(fsr)); 
-clear window; clear mask3; clear movingIntegrel_3; clear fsr; 
-
-% window = 0.5/T; 
-% mask = ones(1,window); 
-% mask2 = linspace(0,100,window); 
-% movingIntegrel_same2 = conv(fsr, mask2, 'same'); 
-
-force = (mass/1000)*9.82; 
-disp('10 sec loaded'); 
-
-
-%% Load data, 5 sec 
-load('mass_2.mat');
-load('fsr_2.mat');
-
-a = 1373.364; 
-voltage = (fsr/4095)*3.3;   % bit levels to voltage
-Fs = 320;                   % Sampling frequency                    
-T = 1/Fs;                   % Sampling period  
- 
-mass = ((straingauge)/4095)*3.3*a; 
-mass = mass - 1070;
-force = (mass/1000)*9.82; 
-clear a; clear mass; clear straingauge;
-
-window = 0.5/T;             % size of integral filter 
-mask3 = linspace(100,0, window); 
-movingIntegrel_3 = conv(fsr, mask3); 
-movingIntegrel_3cliped = movingIntegrel_3(1:length(fsr)); 
-clear window; clear mask3; clear movingIntegrel_3; clear fsr; 
-
+% %% Load data, 60 sec
+% load('fsr_4_long.mat');     % unit (bit level)      
+% load('mass_4_longmat.mat')  % unit (g)
+% Fs = 320;                   % Sampling frequency                    
+% T = 1/Fs;                   % Sampling period  
+% 
+% voltage = (fsr/4095)*3.3;   % bit levels to voltage
+% 
+% window = 0.5/T;             % size of integral filter 
+% mask3 = linspace(100,0, window); 
+% movingIntegrel_3 = conv(fsr, mask3); 
+% movingIntegrel_3cliped = movingIntegrel_3(1:length(fsr)); 
+% 
+% force = (mass/1000)*9.82; 
+% disp('60 sec loaded'); 
+% %cftool
+% 
+% 
+% %% Load data, 10 sec
+% load('fsr_test.mat');       % unit (bit level)      
+% load('mass_test.mat')       % unit (g)
+% 
+% voltage = (fsr/4095)*3.3;   % bit levels to voltage
+% Fs = 320;                   % Sampling frequency                    
+% T = 1/Fs;                   % Sampling period  
+% 
+% window = 0.5/T;             % size of integral filter 
+% mask3 = linspace(100,0, window); 
+% movingIntegrel_3 = conv(fsr, mask3); 
+% movingIntegrel_3cliped = movingIntegrel_3(1:length(fsr)); 
+% clear window; clear mask3; clear movingIntegrel_3; clear fsr; 
+% 
+% % window = 0.5/T; 
+% % mask = ones(1,window); 
+% % mask2 = linspace(0,100,window); 
+% % movingIntegrel_same2 = conv(fsr, mask2, 'same'); 
+% 
+% force = (mass/1000)*9.82; 
+% disp('10 sec loaded'); 
+% 
+% 
+% %% Load data, 5 sec 
+% load('mass_2.mat');
+% load('fsr_2.mat');
+% 
+% a = 1373.364; 
+% voltage = (fsr/4095)*3.3;   % bit levels to voltage
+% Fs = 320;                   % Sampling frequency                    
+% T = 1/Fs;                   % Sampling period  
+%  
+% mass = ((straingauge)/4095)*3.3*a; 
+% mass = mass - 1070;
+% force = (mass/1000)*9.82; 
+% clear a; clear mass; clear straingauge;
+% 
+% window = 0.5/T;             % size of integral filter 
+% mask3 = linspace(100,0, window); 
+% movingIntegrel_3 = conv(fsr, mask3); 
+% movingIntegrel_3cliped = movingIntegrel_3(1:length(fsr)); 
+% clear window; clear mask3; clear movingIntegrel_3; clear fsr; 
+% 
 
 
 %% Test various poly regression
@@ -381,47 +336,47 @@ for i = 1:length(voltage)
 
     %Linear model Poly45:
     %Coefficients (with 95% confidence bounds):     
-%        p00 =       0.344  ;%(0.3381, 0.3499)
-%        p10 =        3.48  ;%(3.311, 3.648)
-%        p01 =   3.991e-08  ;%(2.677e-08, 5.305e-08)
-%        p20 =      -4.407  ;%(-4.777, -4.037)
-%        p11 =  -2.821e-07  ;%(-3.071e-07, -2.572e-07)
-%        p02 =  -2.995e-15  ;%(-7.199e-15, 1.209e-15)
-%        p30 =        2.11  ;%(1.821, 2.4)
-%        p21 =   4.821e-07  ;%(4.541e-07, 5.1e-07)
-%        p12 =  -5.663e-15  ;%(-1.006e-14, -1.269e-15)
-%        p03 =   3.721e-22  ;%(-1.456e-22, 8.898e-22)
-%        p40 =     -0.2346  ;%(-0.3175, -0.1517)
-%        p31 =  -2.563e-07  ;%(-2.719e-07, -2.407e-07)
-%        p22 =  -3.338e-15  ;%(-6.023e-15, -6.537e-16)
-%        p13 =   7.192e-22  ;%(3.209e-22, 1.117e-21)
-%        p04 =  -2.806e-29  ;%(-5.829e-29, 2.179e-30)
-%        p41 =   4.434e-08  ;%(3.916e-08, 4.952e-08)
-%        p32 =   6.889e-16  ;%(-4.378e-16, 1.816e-15)
-%        p23 =   2.876e-23  ;%(-1.253e-22, 1.828e-22)
-%        p14 =  -2.034e-29  ;%(-3.475e-29, -5.927e-30)
-%        p05 =   8.193e-37  ;%(1.057e-37, 1.533e-36)
+       p00 =       0.344  ;%(0.3381, 0.3499)
+       p10 =        3.48  ;%(3.311, 3.648)
+       p01 =   3.991e-08  ;%(2.677e-08, 5.305e-08)
+       p20 =      -4.407  ;%(-4.777, -4.037)
+       p11 =  -2.821e-07  ;%(-3.071e-07, -2.572e-07)
+       p02 =  -2.995e-15  ;%(-7.199e-15, 1.209e-15)
+       p30 =        2.11  ;%(1.821, 2.4)
+       p21 =   4.821e-07  ;%(4.541e-07, 5.1e-07)
+       p12 =  -5.663e-15  ;%(-1.006e-14, -1.269e-15)
+       p03 =   3.721e-22  ;%(-1.456e-22, 8.898e-22)
+       p40 =     -0.2346  ;%(-0.3175, -0.1517)
+       p31 =  -2.563e-07  ;%(-2.719e-07, -2.407e-07)
+       p22 =  -3.338e-15  ;%(-6.023e-15, -6.537e-16)
+       p13 =   7.192e-22  ;%(3.209e-22, 1.117e-21)
+       p04 =  -2.806e-29  ;%(-5.829e-29, 2.179e-30)
+       p41 =   4.434e-08  ;%(3.916e-08, 4.952e-08)
+       p32 =   6.889e-16  ;%(-4.378e-16, 1.816e-15)
+       p23 =   2.876e-23  ;%(-1.253e-22, 1.828e-22)
+       p14 =  -2.034e-29  ;%(-3.475e-29, -5.927e-30)
+       p05 =   8.193e-37  ;%(1.057e-37, 1.533e-36)
        
-       p00 =        1.11  ;%(1.083, 1.136)
-       p10 =       6.027  ;%(5.595, 6.459)
-       p01 =  -1.696e-07  ;%(-2.095e-07, -1.298e-07)
-       p20 =      -9.404  ;%(-10.25, -8.555)
-       p11 =  -6.669e-07  ;%(-7.348e-07, -5.99e-07)
-       p02 =    6.25e-14  ;%(5.171e-14, 7.329e-14)
-       p30 =       5.716  ;%(5.108, 6.323)
-       p21 =   7.869e-07  ;%(7.296e-07, 8.442e-07)
-       p12 =    2.52e-14  ;%(1.588e-14, 3.452e-14)
-       p03 =   -6.74e-21  ;%(-7.92e-21, -5.561e-21)
-       p40 =     -0.9813  ;%(-1.131, -0.8316)
-       p31 =  -5.068e-07  ;%(-5.343e-07, -4.794e-07)
-       p22 =   5.852e-15  ;%(1.124e-15, 1.058e-14)
-       p13 =  -1.209e-21  ;%(-1.917e-21, -5.006e-22)
-       p04 =   2.865e-28  ;%(2.278e-28, 3.452e-28)
-       p41 =   1.098e-07  ;%(1.021e-07, 1.174e-07)
-       p32 =  -3.843e-15  ;%(-5.309e-15, -2.377e-15)
-       p23 =   1.714e-22  ;%(-1.76e-23, 3.605e-22)
-       p14 =   1.023e-29  ;%(-8.752e-30, 2.921e-29)
-       p05 =  -4.094e-36  ;%(-5.184e-36, -3.004e-36)
+%        p00 =        1.11  ;%(1.083, 1.136)
+%        p10 =       6.027  ;%(5.595, 6.459)
+%        p01 =  -1.696e-07  ;%(-2.095e-07, -1.298e-07)
+%        p20 =      -9.404  ;%(-10.25, -8.555)
+%        p11 =  -6.669e-07  ;%(-7.348e-07, -5.99e-07)
+%        p02 =    6.25e-14  ;%(5.171e-14, 7.329e-14)
+%        p30 =       5.716  ;%(5.108, 6.323)
+%        p21 =   7.869e-07  ;%(7.296e-07, 8.442e-07)
+%        p12 =    2.52e-14  ;%(1.588e-14, 3.452e-14)
+%        p03 =   -6.74e-21  ;%(-7.92e-21, -5.561e-21)
+%        p40 =     -0.9813  ;%(-1.131, -0.8316)
+%        p31 =  -5.068e-07  ;%(-5.343e-07, -4.794e-07)
+%        p22 =   5.852e-15  ;%(1.124e-15, 1.058e-14)
+%        p13 =  -1.209e-21  ;%(-1.917e-21, -5.006e-22)
+%        p04 =   2.865e-28  ;%(2.278e-28, 3.452e-28)
+%        p41 =   1.098e-07  ;%(1.021e-07, 1.174e-07)
+%        p32 =  -3.843e-15  ;%(-5.309e-15, -2.377e-15)
+%        p23 =   1.714e-22  ;%(-1.76e-23, 3.605e-22)
+%        p14 =   1.023e-29  ;%(-8.752e-30, 2.921e-29)
+%        p05 =  -4.094e-36  ;%(-5.184e-36, -3.004e-36)
   
        
     Poly45(i) = p00 + p10*x(i) + p01*y(i) + p20*x(i)^2 + p11*x(i)*y(i) + p02*y(i)^2 + p30*x(i)^3 + p21*x(i)^2*y(i)  + p12*x(i)*y(i)^2 + p03*y(i)^3 + p40*x(i)^4 + p31*x(i)^3*y(i) + p22*x(i)^2*y(i)^2 + p13*x(i)*y(i)^3 + p04*y(i)^4 + p41*x(i)^4*y(i) + p32*x(i)^3*y(i)^2 + p23*x(i)^2*y(i)^3 + p14*x(i)*y(i)^4 + p05*y(i)^5;
@@ -622,15 +577,15 @@ disp('done');
 % ylim([0 3000]);
 % ylabel('weight');
 
-plot(tid, force, tid, Poly55, tid, exponentielt2_fit)
+plot(tid, force, tid, Poly45, tid, exponentielt_fit)
 legend('strain gauge','45poly fit', 'exponentielt2_fit');
 ylabel(' Force ( N )');
 xlabel(' Time ( sec ) '); 
 
 
 %% plot (fancy)
-plot(exponentielt2_fit, force)
-%plot(Poly55, force);
+%plot(exponentielt2_fit, force)
+plot(Poly55, force);
 grid('on')
 ylabel('force ( N )'); 
 xlabel('regression ( N )'); 
@@ -644,16 +599,16 @@ xlim([0 20])
 %plot(tid, Poly13_error, tid,Poly14_error, tid,Poly15_error, tid,Poly21_error, tid,Poly22_error, tid,Poly23_error, tid,Poly24_error, tid,Poly25_error, tid,Poly31_error, tid,Poly32_error, tid,Poly33_error, tid,Poly34_error, tid,Poly35_error, tid,Poly41_error, tid,Poly42_error, tid,Poly43_error, tid,Poly44_error, tid,Poly45_error, tid,Poly51_error, tid,Poly52_error, tid,Poly53_error, tid,Poly54_error, tid,Poly55_error)
 ylim([0 200]);
 
-%plot(tid, exponentielt2_fit_error)
+plot(tid, exponentielt2_fit_error)
 plot(tid, Poly44_error)
 
 
 %% Bar chart
 
+X = categorical({'Poly23', 'Poly24','Poly25', 'Poly31', 'Poly32', 'Poly33', 'Poly34', 'Poly35', 'Poly41', 'Poly42', 'Poly43', 'Poly44', 'Poly45','Poly51', 'Poly52', 'Poly53', 'Poly54', 'Poly55'});
+Y = [r23 r24 r25 r31 r32 r33 r34 r35 r41 r42 r43 r44 r45 r51 r52 r53 r54 r55];
 %X = categorical({'Poly23', 'Poly24','Poly25', 'Poly31', 'Poly32', 'Poly33', 'Poly34', 'Poly35', 'Poly41', 'Poly42', 'Poly43', 'Poly44', 'Poly45','Poly51', 'Poly52', 'Poly53', 'Poly54', 'Poly55','Exp','Two-Term Exp'});
-%Y = [r23 r24 r25 r31 r32 r33 r34 r35 r41 r42 r43 r44 r45 r51 r52 r53 r54 r55 rexp1 rexp2];
-X = categorical({'Poly23', 'Poly24','Poly25', 'Poly31', 'Poly32', 'Poly33', 'Poly34', 'Poly35', 'Poly41', 'Poly42', 'Poly43', 'Poly44', 'Poly45','Poly51', 'Poly52', 'Poly53', 'Poly54', 'Poly55','Exp','Two-Term Exp'});
-Y = [mean(Poly23_error) mean(Poly24_error) mean(Poly25_error) mean(Poly31_error) mean(Poly32_error) mean(Poly33_error) mean(Poly34_error) mean(Poly35_error) mean(Poly41_error) mean(Poly42_error)  mean(Poly43_error) mean(Poly44_error) mean(Poly45_error) mean(Poly51_error) mean(Poly52_error) mean(Poly53_error) mean(Poly54_error) mean(Poly55_error), mean(exponentielt_fit_error), mean(exponentielt2_fit_error)];
+%Y = [mean(Poly23_error) mean(Poly24_error) mean(Poly25_error) mean(Poly31_error) mean(Poly32_error) mean(Poly33_error) mean(Poly34_error) mean(Poly35_error) mean(Poly41_error) mean(Poly42_error)  mean(Poly43_error) mean(Poly44_error) mean(Poly45_error) mean(Poly51_error) mean(Poly52_error) mean(Poly53_error) mean(Poly54_error) mean(Poly55_error), mean(exponentielt_fit_error), mean(exponentielt2_fit_error)];
 bar(X,Y)
 grid('on')
 labels1 = string(Y);

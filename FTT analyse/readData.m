@@ -1,5 +1,5 @@
 function readData(src, ~)
-    sampleSize = 9600; 
+    sampleSize = 200*10; 
     
     if(src.UserData.Count == 1)
         disp('sampling started'); 

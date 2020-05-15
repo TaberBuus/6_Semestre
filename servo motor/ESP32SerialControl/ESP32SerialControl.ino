@@ -30,7 +30,7 @@ void loop() {
     }
     if (inChar == '\n') {  // find line feed char 
       Serial.println(inString.toInt());
-      myservo.write(map(inString.toInt(), 0, 100, 0, 180)); //Chance the third parameter if you chance the incomming value range match the 
+      myservo.write(inString.toInt()); //Chance the third parameter if you chance the incomming value range match the 
       inString = "";  // clear the string for new input:
       
     }

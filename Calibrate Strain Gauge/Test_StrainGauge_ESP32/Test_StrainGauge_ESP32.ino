@@ -1,21 +1,27 @@
 boolean doLoadCellSample = false; 
 
-const int numReadings = 10;     // points in the running filter
+const int numReadings = 300;     // points in the running filter
 int readings[numReadings];      // the readings from the analog input
 int readIndex = 0;              // the index of the current reading
 int total = 0;                  // the running total
 int initialReading = 0;         // Zero the sensor value; 
 
 
-int inputPin = 2;               // input pin; 
+int inputPin = 35;               // input pin; 
 float dataValue;         
-float a = 1373.364;             // slope found though callibration
+// float a = 1373.364;           // slope found though callibration
+float a = 0.913;                 // bit level to kilogram
+float b = 856.831;               // Zero output offset
 
 void setup() {
-  Serial.begin(115200); 
-  dacWrite(25, 0);              // mute speaker on M5stack
-  analogSetCycles(255);         // set adc to max cycles used for charging the capacitor before performing ADC
-  delay(100); 
+  Serial.begin(115200);
+  analogReadResolution(12);             // Sets the size (in bits) of the value returned by analogRead(), default is 12-bit (0 - 4095), range is 9 - 12 bits
+  analogSetWidth(12);                   // Set the sample bits and resolution. It can be a value between 9 (0 – 511) and 12 bits (0 – 4095). Default is 12-bit resolution.
+  analogSetCycles(8);                   // Set the number of cycles per sample. Default is 8. Range: 1 to 255.
+  analogSetSamples(1);                  // Set the number of samples in the range. Default is 1 sample. It has an effect of increasing sensitivity.
+  analogSetAttenuation(ADC_11db);       // Sets the input attenuation for ALL ADC inputs, default is ADC_11db, range is ADC_0db, ADC_2_5db, ADC_6db, ADC_11db
+  dacWrite(25, 0);                      // mute speaker on M5stack
+
 
   // Zero the sensor to start weight.
   for (int i = 0; i < numReadings; i++){
@@ -49,8 +55,12 @@ void loop() {
   }
 
   // calculate the average and subtract initialReading:
-  dataValue = (float) (total / numReadings) - initialReading;
-  dataValue = a*(dataValue/4095)*3.3; 
+  dataValue = (float) (total / numReadings); 
+  //dataValue = (float) (total / numReadings) - initialReading;
+
+ 
+  dataValue =  (1.095*dataValue -937.1-14);
+  
   Serial.println(dataValue); 
-  delay(100); 
+  delay(10); 
 }

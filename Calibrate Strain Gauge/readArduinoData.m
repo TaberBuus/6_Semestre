@@ -1,6 +1,10 @@
 function readArduinoData(src, ~)
-    sampleSize = 10; 
+    sampleSize = 200*60; 
 
+    if(src.UserData.Count == 1)
+        disp('sampling started'); 
+    end 
+    
     % Read the ASCII data from the serialport object.
     data = readline(src);
 
