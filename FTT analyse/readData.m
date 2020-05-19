@@ -1,16 +1,22 @@
 function readData(src, ~)
-    sampleSize = 200*10; 
+    sampleSize = 2200; 
     
     if(src.UserData.Count == 1)
         disp('sampling started'); 
     end 
     
     % Read the ASCII data from the serialport object.
-    data = readline(src);
+   data = readline(src);
+%    temp = clock; 
+%    data = temp(6); 
+ 
+   
 
     % Convert the string data to numeric type and save it in the UserData
     % property of the serialport object.
-    src.UserData.Data(end+1) = str2double(data);
+    %src.UserData.Data(end+1) = str2double(data);
+    src.UserData.Data(end+1) = (data);
+
 
     % Update the Count value of the serialport object.
     src.UserData.Count = src.UserData.Count + 1;
@@ -19,7 +25,7 @@ function readData(src, ~)
     % callbacks and plot the data.
     if src.UserData.Count > sampleSize + 1
         configureCallback(src, "off");
-        plot((src.UserData.Data(2:end)/4095)*3.3);
+        %plot((src.UserData.Data(2:end)/4095)*3.3);
         disp(fprintf('Sample completed. %d data point recorded.',sampleSize)); 
     end
 end

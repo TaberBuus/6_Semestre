@@ -1,3 +1,15 @@
+%% proper clear
+clc
+clear all 
+if ~isempty(instrfind) % check if any instrument are connected
+    fclose(instrfind); % close com if any open 
+    delete(instrfind); 
+end
+clc; 
+close all; 
+clear all; 
+disp('System reset'); 
+
 %% Load signal (Calibrated)
 clc;  
 clear;
@@ -33,7 +45,7 @@ cftool
 %% Test various poly regression
 x = voltage; 
 y = movingIntegrel_3voltcliped;
-tid =linspace(0,length(voltage)/320,length(voltage));
+tid =linspace(0,20,length(voltage));
 
 
 for i = 1:length(voltage)
@@ -230,8 +242,11 @@ grid('on')
 labels1 = string(Y);
 text(X,Y,labels1,'VerticalAlignment','bottom','HorizontalAlignment','center')
 ylim([0.95 1])
-ylabel('R-squared ( R^2 )')
-title('Test af linearitet mellem fundne polynomie regressioner ift. 20 signal'); 
+ylabel('R-squared [ R^2 ]')
+grid('on');
+set(gcf,'Position',[300 300 600 250])
+set(gca,'FontSize',10)
+title('Linearitet af fundne polynomie regressioner'); 
 
 
 
@@ -242,10 +257,15 @@ title('Test af linearitet mellem fundne polynomie regressioner ift. 20 signal');
 % ylim([0 3000]);
 % ylabel('weight');
 
-plot(tid, force, tid, Poly44)
-legend('strain gauge','45poly fit');
-ylabel(' Force ( N )');
-xlabel(' Time ( sec ) '); 
+plot(tid, force, tid, Poly41)
+legend('strain gauge','41poly fit');
+ylabel(' Kraft [ N ]');
+xlabel(' Tid [ sec ] '); 
+set(gcf,'Position',[300 300 600 350])
+set(gca,'FontSize',10)
+grid('on'); 
+title('Poly41 formel i forhold til strain gauge'); 
+ylim([0 22]);
 
 
 
@@ -257,8 +277,11 @@ hold('on')
 plot(force, force); 
 legend('poly41 vs Faktisk kraft', '1 til 1 linearitet')
 grid('on')
-ylabel('Faktisk kraft påført FSR sensor ( N )'); 
-xlabel('Kraft output af poly41 ( N )'); 
+ylabel('Faktisk kraft påført FSR sensor [ N ]'); 
+xlabel('Kraft output af poly41 [ N ]'); 
+set(gca,'FontSize',10)
+title('Linearitet mellem reelle og estimeret tryk'); 
+
 
 ylim([0 20])
 xlim([0 20])
@@ -267,41 +290,84 @@ xlim([0 20])
 
 %% Error plot
 %plot(tid, Poly13_error, tid,Poly14_error, tid,Poly15_error, tid,Poly21_error, tid,Poly22_error, tid,Poly23_error, tid,Poly24_error, tid,Poly25_error, tid,Poly31_error, tid,Poly32_error, tid,Poly33_error, tid,Poly34_error, tid,Poly35_error, tid,Poly41_error, tid,Poly42_error, tid,Poly43_error, tid,Poly44_error, tid,Poly45_error, tid,Poly51_error, tid,Poly52_error, tid,Poly53_error, tid,Poly54_error, tid,Poly55_error)
-ylim([0 200]);
 
 plot(tid, exponentielt2_fit_error)
 plot(tid, Poly44_error)
 
 
-%% plot 
+%% remove 0 points (ift sensitivity)
 
-%plot(voltage, force); 
-%fit(voltage',force','exp2')
-a =     0.09622  ;%(0.08754, 0.1049)
-b =       1.609  ;%(1.572, 1.645)
-c =   2.728e-10  ;%(-7.547e-10, 1.3e-09)
-d =       7.216  ;%(6.083, 8.349)
+j = 1; 
+thresshold = 0.25; 
+for i = 1:length(force) 
+    if force(i) > thresshold
+        ZeroForce(j)   = force(i); 
+        ZeroVoltage(j) = voltage(i); 
+        j = j + 1; 
+    end 
+end 
 
-x = linspace(0, 3.3, 100); 
-y = a*exp(b*x) + c*exp(d*x); 
+%% Sensitivitet Power ( simple plot )
+
+% General model Power2:
+%      f(x) = a*x^b+c
+% Coefficients (with 95% confidence bounds):
+a =      -3.594  ;%(-3.667, -3.522)
+b =     -0.2874  ;%(-0.2955, -0.2793)
+c =       4.732  ;%2(4.66, 4.803)
+
+% Goodness of fit:
+%   SSE: 27.03
+%   R-square: 0.9793
+%   Adjusted R-square: 0.9793
+%   RMSE: 0.09798
+
+x = linspace(0.3899, max(ZeroForce), length(ZeroForce)); 
+y = a*(x).^b+c; 
 
 hold('on'); 
 plot(x,y)
-plot(voltage, force, '.'); 
-xlim([0 3.3]);
-xlabel('Spænding ( v ); ');
-ylabel('Kraft induceret på FSR sensor ( N )')
+plot(ZeroForce, ZeroVoltage, '.'); 
+% ylim([0 3.3])
+% xlim([0 max(ZeroForce)+1])
+xlabel('Kraft induceret på FSR sensor ( N ) ');
+ylabel('FSR output ( V )')
+legend('Power regression','Målinger');
+set(gca,'FontSize',14)
+set(gcf,'Position',[300 300 1000 600])
+xlim([0 22]);
+grid('on');
+title('Power regression'); 
 hold('off'); 
 
-%%
+
+
+
+%% sensitivitet Power( diff plot)
 syms X
-Y = a*exp(b*X) + c*exp(d*X); 
-Y_diff = diff(Y)
+Y = a*(X).^b+c;
 
-y_diff = (2379800457271723783*exp((902*x)/125))/1208925819614629174706176000 + (7740899*exp((1609*x)/1000))/50000000; 
 
-plot(x,y_diff); 
-xlabel('Spænding out af FSR konfiguation ( v )'); 
+diff(Y)
+
+for i = 1:length(x); 
+    y_diff(i) = 2582289/(2500000*x(i)^(1.2874)); 
+end
+
+plot(x, y_diff); 
+ylabel('ΔSpænding / ΔNewton ');
+xlabel('Kraft induceret på FSR sensor ( N )')
+set(gca,'FontSize',14)
+title('Sensitivitet'); 
+grid('on'); 
+xlim([0 22]);
+set(gcf,'Position',[300 300 1000 600])
+
+
+% xlabel('Spænding ( v )'); 
+% ylabel('d(Force) / D(Spænding)')
+% grid('on'); 
+
 
 
 

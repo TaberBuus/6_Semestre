@@ -143,18 +143,18 @@ data = microcontrollerObj.UserData.Data(2:end);
 
 
 j = 1; 
-for i = 10:2009
+for i = 80:180-1 
     diff(j) = data(i+1) - data(i); 
     j = j + 1; 
 end 
 
+x = linspace(1, 101, 100); 
 
-plot(diff); 
-title('Test af sampling frekvens'); 
+plot(x, diff); 
+xlim([1 100]); 
 ylabel('Difference mellem foregående sample ( micro sec )');
-xlabel('Sample nummer')
-set(gcf,'Position',[300 300 1000 600])
-set(gca,'FontSize',14)
+xlabel('Sample')
+set(gca,'FontSize',12)
 grid('on'); 
 
 

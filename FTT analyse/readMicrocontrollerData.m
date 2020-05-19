@@ -2,7 +2,8 @@ function readMicrocontrollerData(src, ~)
     sampleSize = 100; 
 
     % Read the ASCII data from the serialport object.
-    data = readline(src);
+    %data = readline(src);
+    data = clock;
 
     % Convert the string data to numeric type and save it in the UserData
     % property of the serialport object.
@@ -15,7 +16,7 @@ function readMicrocontrollerData(src, ~)
     % callbacks and plot the data.
     if src.UserData.Count > sampleSize + 1
         configureCallback(src, "off");
-        plot(src.UserData.Data(2:end));
+        %plot(src.UserData.Data(2:end));
         disp(fprintf('Sample completed. %d data point recorded.',sampleSize)); 
     end
 end

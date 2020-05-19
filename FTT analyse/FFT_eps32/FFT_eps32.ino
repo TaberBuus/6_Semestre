@@ -24,7 +24,7 @@ void setup() {
   }
   analogReadResolution(12);             // sets the size (in bits) of the value returned by analogRead(), default is 12-bit (0 - 4095), range is 9 - 12 bits
   analogSetWidth(12);                   // set the sample bits and resolution. It can be a value between 9 (0 – 511) and 12 bits (0 – 4095). Default is 12-bit resolution.
-  analogSetCycles(255);                   // set the number of cycles per sample. Default is 8. Range: 1 to 255.
+  analogSetCycles(255);                 // set the number of cycles per sample. Default is 8. Range: 1 to 255.
   analogSetSamples(1);                  // set the number of samples in the range. Default is 1 sample. It has an effect of increasing sensitivity.
   analogSetAttenuation(ADC_11db);       // sets the input attenuation for ALL ADC inputs, default is ADC_11db, range is ADC_0db, ADC_2_5db, ADC_6db, ADC_11db
   dacWrite(25, 0);                      // mute speaker on M5stack
