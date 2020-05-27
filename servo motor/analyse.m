@@ -91,11 +91,11 @@ hold('on');
 plot(grader, force1, grader, force2, grader, force3, grader, force4, grader, force5, grader, force6, grader, force7, grader, force8, grader,force9, grader,force10); 
 legend('nr 1','nr 2','nr 3','nr 4','nr 5','nr 6','nr 7','nr 8','nr 9','nr 10')
 ylabel('Kraftpåvirkning udført af servo [ N ] '); 
-xlabel('Vinkel servo motoren arm positioneres [ Grader ]'); 
+xlabel('Vinkel af servo motoren arm [ Grader ]'); 
 grid('on');
 set(gcf,'Position',[300 300 1000 600])
 set(gca,'FontSize',14)
-title('Kalibering af servo motoren'); 
+title('Kalibrering af servo motoren'); 
 
 
 %% exponentiel regression

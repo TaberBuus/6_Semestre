@@ -258,13 +258,13 @@ title('Linearitet af fundne polynomie regressioner');
 % ylabel('weight');
 
 plot(tid, force, tid, Poly41)
-legend('strain gauge','41poly fit');
+legend('strain gauge','poly4*1 fit');
 ylabel(' Kraft [ N ]');
 xlabel(' Tid [ sec ] '); 
 set(gcf,'Position',[300 300 600 350])
 set(gca,'FontSize',10)
 grid('on'); 
-title('Poly41 formel i forhold til strain gauge'); 
+title('Poly4*1 formel i forhold til strain gauge'); 
 ylim([0 22]);
 
 
@@ -275,10 +275,10 @@ plot(Poly41, force,'.' );
 
 hold('on')
 plot(force, force); 
-legend('poly41 vs Faktisk kraft', '1 til 1 linearitet')
+legend('poly4*1 vs Faktisk kraft', '1 til 1 linearitet')
 grid('on')
 ylabel('Faktisk kraft påført FSR sensor [ N ]'); 
-xlabel('Kraft output af poly41 [ N ]'); 
+xlabel('Kraft output af poly4*1 [ N ]'); 
 set(gca,'FontSize',10)
 title('Linearitet mellem reelle og estimeret tryk'); 
 
